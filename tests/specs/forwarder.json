@@ -1,0 +1,29 @@
+[
+  {
+    "name": "forwarding setup opens from the main menu",
+    "steps": [
+      {
+        "send": { "callback": "fw:open" },
+        "expect": [{ "method": "sendMessage", "payload": { "text": "Forwarding storage isn't set up yet. Add persistent storage, then try again." } }]
+      }
+    ]
+  },
+  {
+    "name": "target channel button asks for its ID",
+    "steps": [
+      {
+        "send": { "callback": "fw:destination" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "Send the target channel ID. It usually starts with -100." } }]
+      }
+    ]
+  },
+  {
+    "name": "approved user button asks for its ID",
+    "steps": [
+      {
+        "send": { "callback": "fw:add-user" },
+        "expect": [{ "method": "editMessageText", "payload": { "text": "Send the user Telegram ID to approve." } }]
+      }
+    ]
+  }
+]

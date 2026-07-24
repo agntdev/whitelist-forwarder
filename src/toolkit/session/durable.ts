@@ -51,6 +51,11 @@ interface Reminder {
   text: string;
 }
 
+interface DomainWrite {
+  key: string;
+  value: unknown;
+}
+
 /**
  * createDurableSessionStorage — a grammY StorageAdapter that routes each session
  * key to its own ChatDO instance. Pass to buildBot({ storage }) in the Worker.
@@ -140,6 +145,23 @@ export class ChatDO {
       }
       if (request.method === "DELETE") {
         await this.state.storage.delete("session");
+        return new Response(null, { status: 204 });
+      }
+    }
+
+    // Small durable application records. Feature stores use explicit keys and
+    // indexes; this endpoint intentionally has no list/scan operation.
+    if (url.pathname === "/domain") {
+      if (request.method === "GET") {
+        const key = url.searchParams.get("key");
+        if (!key) return new Response("missing key", { status: 400 });
+        const value = await this.state.storage.get<unknown>(`domain:${key}`);
+        return value === undefined ? new Response(null, { status: 204 }) : Response.json(value);
+      }
+      if (request.method === "PUT") {
+        const body = (await request.json()) as DomainWrite;
+        if (!body.key) return new Response("missing key", { status: 400 });
+        await this.state.storage.put(`domain:${body.key}`, body.value);
         return new Response(null, { status: 204 });
       }
     }

@@ -7,7 +7,7 @@
         "expect": [
           {
             "method": "sendMessage",
-            "payload": { "text": "👋 Welcome! Tap a button below to get started." }
+            "payload": { "text": "👋 Welcome! Tap a button below to get started.", "reply_markup": { "inline_keyboard": [[{"text":"Configure forwarding","callback_data":"fw:open"},{"text":"Forwarding status","callback_data":"fw:status"}], [{"text":"❓ Help","callback_data":"menu:help"}]] } }
           }
         ]
       }
